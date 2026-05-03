@@ -48,8 +48,12 @@ const Hero = () => {
   }, [i18n.language]);
 
   const handleDownloadCV = () => {
-    const cvPath = '/assets/cvmusabugrademir.pdf';
-    window.open(cvPath, '_blank');
+    const link = document.createElement('a');
+    link.href = './assets/cvmusabugrademir.pdf';
+    link.download = 'Musa_Bugra_Demir_CV.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -121,7 +125,7 @@ const Hero = () => {
             
             <div className="absolute inset-4 rounded-full overflow-hidden border border-white/10 glass-panel z-10">
               <img 
-                src="/assets/pp.webp" 
+                src="./assets/pp.webp" 
                 alt="Musa Buğra Demir" 
                 className="w-full h-full object-cover object-center"
                 onError={(e) => {

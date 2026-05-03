@@ -55,7 +55,7 @@ const Experience = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-neon-blue)]/0 rounded-full blur-[80px] group-hover:bg-[var(--color-neon-blue)]/20 transition-all duration-500"></div>
             <div className="relative z-10">
               <img 
-                src="/assets/ieee-mb-blue.webp" 
+                src="./assets/ieee-mb-blue.webp" 
                 alt="IEEE Logo" 
                 className="w-12 h-12 mb-4 object-contain opacity-70 brightness-0 invert group-hover:brightness-100 group-hover:invert-0 group-hover:opacity-100 group-hover:drop-shadow-[0_0_15px_var(--color-neon-blue)] transition-all duration-300" 
                 onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
