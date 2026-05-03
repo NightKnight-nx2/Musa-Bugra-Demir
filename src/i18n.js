@@ -1,0 +1,132 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+const resources = {
+  en: {
+    translation: {
+      "nav.about": "About",
+      "nav.experience": "Experience",
+      "nav.achievements": "Achievements",
+      "nav.skills": "Skills",
+      "nav.contact": "Contact",
+      "hero.title": "Hi, I'm\nMusa Buğra Demir",
+      "hero.subtitle": "Computer Engineering Student @\u00A0Ege University\nAI & Robotics Enthusiast | Game Developer",
+      "hero.btn.projects": "View My Projects",
+      "hero.btn.cv": "Download CV",
+      "about.title": "About Me & My Vision",
+      "about.quote": "'While some merely organize events, we build vision and make history.'",
+      "about.p1": "I am a junior Computer Engineering student at Ege University. For me, development goes beyond just writing code; I actively lead tech communities and dedicate my time as a STEM volunteer to inspire the next generation.",
+      "about.p2": "My core mission is to transform every organization I am part of into a dynamic 'center of opportunity and innovation'. I strongly believe that boundaries only exist as long as we choose not to push them, and this philosophy drives everything I do.",
+      "experience.title": "Experience & Leadership",
+      "exp.ieee.role": "2025-2026 Term Executive Board Treasurer & Executive Board Member Responsible for CS, ComSoc, WIE, TT Chapters",
+      "exp.ieee.desc": "I undertook the General Design and Fullstack Development of the IEEE Ege Website, the general coordination of Teknofest Projects, the economic planning of the community, the execution of collaborations with companies, and the preparation of sponsorship agreements. I took an active role in the coordination of events such as Butterfly Effect in Business Life'26, Izmir Energy Summit'26, RAStlantı, SciTech'26, CyberEge'24, and 23rd EBT.",
+      "exp.ieee.tag": "Leadership, Team Management, Budget Planning and Event Coordination",
+      "exp.usv.title": "IEEE Ege Mavi İnci Unmanned Surface Vehicle (USV)",
+      "exp.usv.desc": "OpenCV, YOLO, PyTorch, Gazebo, Simulation Systems, Mission Planner, Embedded Algorithms, Model Training and Development, Image Processing",
+      "exp.usv.tag": "Image Processing and Simulation Systems Engineer",
+      "exp.ugv.title": "IEEE Ege ODBARS Unmanned Ground Vehicle (UGV)",
+      "exp.ugv.desc": "LoRa Modules, Communication Algorithms, and Mentorship to the Software Team",
+      "exp.ugv.tag": "Communication Systems Engineer and Head of Communications Systems Unit",
+      "exp.crafters.role": "C# & Unity Level Design",
+      "exp.celikgoz.title": "IEEE Ege Çelikgöz SteelDome Air Defence Systems",
+      "exp.celikgoz.desc": "OpenCV, YOLO, PyTorch, Simulation Systems, Fire Control Systems, Effective Range Calculation Algorithms, Embedded Algorithms, Model Training and Development, Image Processing",
+      "exp.celikgoz.tag": "Software Team Leader",
+      "exp.cubesat.title": "IEEE Ege CubeSat Cube Satelite Project",
+      "exp.cubesat.desc": "OpenCV, YOLO, PyTorch, Satellite Communication, Cryptology, Space Environment Simulations, Effective Orbit Calculation Algorithms, Embedded Algorithms, Space-Earth Data Transfer, Image Processing",
+      "exp.cubesat.tag": "Software Team Leader and Project Manager",
+      "achievements.title": "Achievements",
+      "ach.monad.sub": "\"Best Idea\" & \"Most Sustainable Idea\"",
+      "ach.ieee.sub": "24-Hour Programming Competition",
+      "ach.ieee.tr": "Turkey",
+      "ach.ieee.world": "World",
+      "ach.stem.desc": "Igniting the engineering spark in high school youth",
+      "ach.stem.title": "STEM Projects",
+      "ach.stem.p1": "STAR Project",
+      "ach.stem.p2": "Teach and Make",
+      "ach.stem.p3": "Children in Power",
+      "ach.stem.p4": "Hour of Code",
+      "ach.stem.p5": "Akademiden Liseye: Kadın Mühendisler",
+      "skills.title": "My Tech Stack",
+      "skills.desc": "A comprehensive toolkit spanning across hardware-level programming, artificial intelligence, modern web technologies, and game design.",
+      "skills.cat.lang": "Languages",
+      "skills.cat.ai": "AI & Computer Vision",
+      "skills.cat.rob": "Robotics & Simulation",
+      "skills.cat.game": "Game & 3D",
+      "skills.cat.web": "Web & Design",
+      "contact.title": "Contact & Socials",
+      "contact.motto": "Advancing Technology for Humanity",
+      "contact.personal": "Personal Email",
+      "contact.ieee": "IEEE Email"
+    }
+  },
+  tr: {
+    translation: {
+      "nav.about": "Hakkımda",
+      "nav.experience": "Deneyimler",
+      "nav.achievements": "Başarılar",
+      "nav.skills": "Yetenekler",
+      "nav.contact": "İletişim",
+      "hero.title": "Merhaba, Ben\nMusa Buğra Demir",
+      "hero.subtitle": "Bilgisayar Mühendisliği Öğrencisi @\u00A0Ege Üniversitesi\nYapay Zeka & Robotik Tutkunu | Oyun Geliştirici",
+      "hero.btn.projects": "Projelerimi Gör",
+      "hero.btn.cv": "CV İndir",
+      "about.title": "Hakkımda & Vizyonum",
+      "about.quote": "'Bazıları sadece etkinlik düzenler; bizler ise vizyon inşa eder, tarih yazarız.'",
+      "about.p1": "Ege Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisiyim. Geliştirme sürecini sadece kod yazmaktan ibaret görmüyor; aynı zamanda teknoloji topluluklarına liderlik ediyor ve STEM alanında gönüllü çalışmalar yürütüyorum.",
+      "about.p2": "Temel misyonum, parçası olduğum her yapıyı üretken birer 'fırsat ve dönüşüm merkezine' dönüştürmek. Sınırların yalnızca biz onları zorlamadığımız sürece var olduğuna inanıyor ve hedeflerimi bu vizyonla şekillendiriyorum.",
+      "experience.title": "Deneyimlerim & Liderlik",
+      "exp.ieee.role": "2025-2026 Dönemi Yönetim Kurulu Saymanı ve CS, ComSoc, WIE, TT Komitelerinden Sorumlu Yönetim Kurulu Üyesi",
+      "exp.ieee.desc": "IEEE Ege Websitesinin Genel Tasarımı ve Fullstack Developper'lığını, Teknofest Projelerinin genel koordinatörlüğünü, topluluğun ekonomik planlamasını, firmalarla olan iş birliklerinin yürütülmesini ve sponsorluk sözleşmelerinin hazırlanmasını ben üstlendim. İş Hayatında Kelebek Etkisi'26, İzmir Enerji Zirvesi'26, RAStlantı, SciTech'26, CyberEge'24, 23. EBT gibi etkinliklerin koordinasyonunda aktif rol aldım.",
+      "exp.ieee.tag": "Liderlik, Ekip Yönetimi, Bütçe Planlaması ve Etkinlik Koordinasyonu",
+      "exp.usv.title": "IEEE Ege Mavi İnci İnsansız Deniz Aracı (İDA)",
+      "exp.usv.desc": "OpenCV, YOLO, PyTorch, Gazebo, Simülasyon Sistemleri, Mission Planner, Gömülü Algoritmaları, Model Eğitimi ve Geliştirme, Görüntü İşleme",
+      "exp.usv.tag": "Görüntü İşleme ve Simülasyon Sistemleri Mühendisi",
+      "exp.ugv.title": "IEEE Ege ODBARS İnsansız Kara Aracı (İKA)",
+      "exp.ugv.desc": "LoRa Modülleri, Haberleşme Algoritmaları ve Yazılım Ekibine Mentörlük",
+      "exp.ugv.tag": "Haberleşme Sistemleri Mühendisi ve Haberleşme Birimi Sorumlusu",
+      "exp.crafters.role": "C# ve Unity Bölüm Tasarımı",
+      "exp.celikgoz.title": "IEEE Ege Çelikgöz Çelikkubbe Hava Savunma Sistemleri",
+      "exp.celikgoz.desc": "OpenCV, YOLO, PyTorch, Simülasyon Sistemleri, Atış Kontrol Sistemleri, Etkin Menzil Hesaplama Algoritmaları, Gömülü Algoritmaları, Model Eğitimi ve Geliştirme, Görüntü İşleme",
+      "exp.celikgoz.tag": "Yazılım Birimi Kaptanı",
+      "exp.cubesat.title": "IEEE Ege CubeSat Küp Uydu Projesi",
+      "exp.cubesat.desc": "OpenCV, YOLO, PyTorch, Uydu Haberleşmesi, Kriptoloji, Uzay Ortamı Simülasyonları, Etkin Yörünge Hesaplama Algoritmaları, Gömülü Algoritmaları, Uzay-Dünya Arasında Veri Aktarımı, Görüntü İşleme",
+      "exp.cubesat.tag": "Yazılım Birimi Kaptanı ve Proje Sorumlusu",
+      "achievements.title": "Başarılarım",
+      "ach.monad.sub": "\"En İyi Fikir\" & \"En Sürdürülebilir Fikir\"",
+      "ach.ieee.sub": "24 Saatlik Programlama Yarışması",
+      "ach.ieee.tr": "Türkiye",
+      "ach.ieee.world": "Dünya",
+      "ach.stem.desc": "Liseli gençlerin içindeki mühendislik ışığını yakıyoruz",
+      "ach.stem.title": "STEM Projeleri",
+      "ach.stem.p1": "STAR Projesi",
+      "ach.stem.p2": "Teach and Make",
+      "ach.stem.p3": "Children in Power",
+      "ach.stem.p4": "Hour of Code",
+      "ach.stem.p5": "Akademiden Liseye: Kadın Mühendisler",
+      "skills.title": "Kullandığım Teknolojiler",
+      "skills.desc": "Yazılım geliştirme sürecinin her katmanında; donanım seviyesinden yapay zekaya, modern web teknolojilerinden oyun tasarımına kadar geniş bir uzmanlık yelpazesi.",
+      "skills.cat.lang": "Diller",
+      "skills.cat.ai": "Yapay Zeka ve Görüntü İşleme",
+      "skills.cat.rob": "Robotik ve Simülasyon",
+      "skills.cat.game": "Oyun ve 3D Tasarım",
+      "skills.cat.web": "Web & Tasarım",
+      "contact.title": "İletişim & Sosyal Medya",
+      "contact.motto": "Advancing Technology for Humanity",
+      "contact.personal": "Kişisel E-posta",
+      "contact.ieee": "IEEE E-posta"
+    }
+  }
+};
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: "en", // default language
+    fallbackLng: "tr",
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export default i18n;
