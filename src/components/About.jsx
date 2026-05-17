@@ -1,71 +1,96 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { Quote, Code2, BrainCircuit } from 'lucide-react';
+import { SectionLabel, NeonHeading, CornerTicks } from './Atoms';
 
-const About = () => {
+function About() {
   const { t } = useTranslation();
 
   return (
-    <section id="about" className="py-24 relative relative overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
-            {t('about.title')}
-            <span className="text-[var(--color-neon-blue)]">.</span>
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-[var(--color-neon-blue)] to-[var(--color-neon-purple)] rounded-full"></div>
-        </motion.div>
+    <section id="about" style={{
+      position: 'relative', padding: 'clamp(80px,12vw,160px) clamp(20px,4vw,48px)',
+    }}>
+      <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+        <div className="reveal">
+          <SectionLabel idx="01">{t('about.label')}</SectionLabel>
+        </div>
 
-        <div className="grid md:grid-cols-12 gap-8">
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-5 glass-panel p-8 rounded-2xl relative overflow-hidden"
-          >
-            {/* Decorative background element */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[var(--color-neon-purple)]/20 blur-[50px] rounded-full"></div>
+        <div className="about-grid" style={{
+          display: 'grid', gridTemplateColumns: '1fr', gap: 32, alignItems: 'start',
+        }}>
+          {/* Col 1 */}
+          <div>
+            <div className="reveal reveal-d1" style={{ marginBottom: 32 }}>
+              <NeonHeading>
+                {t('about.title1')}<br />
+                <span style={{ color: 'var(--cyan)' }}>{t('about.title2')}</span> {t('about.title3')}
+              </NeonHeading>
+            </div>
             
-            <Code2 size={40} className="text-[var(--color-neon-purple)] mb-6" />
-            <p className="text-lg text-gray-300 leading-relaxed font-light">
-              {t('about.p1')}
-            </p>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="md:col-span-7 glass-panel p-8 rounded-3xl relative overflow-hidden group"
-          >
-            {/* Decorative background element */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-neon-blue)]/10 rounded-full blur-[40px] group-hover:bg-[var(--color-neon-blue)]/20 transition-all duration-500"></div>
-            
-            <BrainCircuit size={32} className="text-[var(--color-neon-blue)] mb-6" />
-            <div className="relative">
-              <p className="text-xl md:text-2xl font-bold italic mb-6 leading-snug relative z-10">
+            <div className="reveal reveal-d2 about-quote" style={{
+              position: 'relative', padding: '32px 32px 32px 40px',
+              borderLeft: '2px solid var(--cyan)',
+              background: 'linear-gradient(90deg, rgba(0,240,255,.05) 0%, transparent 100%)',
+              marginBottom: 32,
+            }}>
+              <div style={{
+                position: 'absolute', top: 12, left: 16,
+                fontFamily: 'var(--ff-mono)', fontSize: 10, color: 'var(--cyan)',
+                letterSpacing: '0.18em',
+              }}>{t('about.quote_label')}</div>
+              <p style={{
+                fontFamily: 'var(--ff-display)', fontWeight: 500, fontSize: 'clamp(18px,2vw,22px)',
+                lineHeight: 1.4, color: 'var(--ink)', margin: '14px 0 0 0',
+              }}>
                 {t('about.quote')}
               </p>
             </div>
-            <p className="text-gray-400 leading-relaxed">
-              {t('about.p2')}
-            </p>
-          </motion.div>
+          </div>
+
+          {/* Col 2 */}
+          <div className="reveal reveal-d3" style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--ink-dim)' }}>
+            <p style={{ marginBottom: 20 }}>{t('about.p1')}</p>
+            <p>{t('about.p2')}</p>
+          </div>
+
+          {/* Stats / Readouts */}
+          <div className="reveal reveal-d4 about-stats" style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            border: '1px solid var(--line)', borderRadius: 12,
+            background: 'rgba(7,11,21,.6)', backdropFilter: 'blur(6px)',
+            overflow: 'hidden', position: 'relative',
+            marginTop: 16,
+          }}>
+            <CornerTicks />
+            <StatBox label={t('about.stats.y_label')} val={t('about.stats.y_val')} sub={t('about.stats.y_sub')} accent="var(--cyan)" index={0} />
+            <StatBox label={t('about.stats.p_label')} val={t('about.stats.p_val')} sub={t('about.stats.p_sub')} accent="var(--magenta)" index={1} />
+            <StatBox label={t('about.stats.m_label')} val={t('about.stats.m_val')} sub={t('about.stats.m_sub')} accent="var(--violet)" index={2} />
+          </div>
         </div>
-        
       </div>
     </section>
   );
-};
+}
+
+function StatBox({ label, val, sub, accent, index }) {
+  return (
+    <div style={{
+      padding: 'clamp(20px,3vw,32px)',
+      borderRight: index < 2 ? '1px solid var(--line)' : 'none',
+      borderBottom: 'none',
+    }}>
+      <div style={{
+        fontFamily: 'var(--ff-mono)', fontSize: 11, letterSpacing: '0.18em',
+        color: 'var(--ink-dim)', marginBottom: 14,
+      }}>// {label}</div>
+      <div style={{
+        fontFamily: 'var(--ff-display)', fontWeight: 500, fontSize: 'clamp(36px,5vw,56px)',
+        color: 'var(--ink)', marginBottom: 8, lineHeight: 1,
+      }}>{val}</div>
+      <div style={{
+        fontSize: 13, color: 'var(--ink-dim)',
+      }}>{sub}</div>
+    </div>
+  );
+}
 
 export default About;

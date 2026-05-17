@@ -1,119 +1,224 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { Mail, Sparkles, Star } from 'lucide-react';
+import { SectionLabel, NeonHeading, CornerTicks } from './Atoms';
 
-const Contact = () => {
+function Field({ label, value, error, onChange, placeholder, type = 'text', textarea }) {
+  const [focus, setFocus] = useState(false);
+  const Tag = textarea ? 'textarea' : 'input';
+  return (
+    <div style={{ marginBottom: 18 }}>
+      <label style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        fontFamily: 'var(--ff-mono)', fontSize: 11, letterSpacing: '0.18em',
+        color: focus ? 'var(--cyan)' : 'var(--ink-dim)', marginBottom: 8,
+        transition: 'color .2s',
+      }}>
+        <span>// {label}</span>
+        {error && <span style={{ color: 'var(--magenta)', textTransform: 'lowercase' }}>! {error}</span>}
+      </label>
+      <div style={{
+        display: 'flex', alignItems: textarea ? 'flex-start' : 'center', gap: 8,
+        padding: textarea ? '12px 14px' : '0 14px',
+        height: textarea ? 'auto' : 46,
+        borderRadius: 8,
+        border: `1px solid ${focus ? 'var(--cyan)' : error ? 'rgba(255,43,214,.5)' : 'var(--line-bright)'}`,
+        background: 'rgba(0,0,0,.25)',
+        transition: 'all .2s',
+        boxShadow: focus ? '0 0 0 1px rgba(0,240,255,.25), 0 0 24px rgba(0,240,255,.12)' : 'none',
+      }}>
+        <span style={{ color: focus ? 'var(--cyan)' : 'var(--ink-faint)', fontFamily: 'var(--ff-mono)', fontSize: 13 }}>›</span>
+        <Tag
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          placeholder={placeholder}
+          rows={textarea ? 4 : undefined}
+          style={{
+            flex: 1, background: 'transparent', border: 0, outline: 'none',
+            color: 'var(--ink)', fontFamily: 'var(--ff-body)', fontSize: 14,
+            resize: textarea ? 'vertical' : 'none',
+            padding: textarea ? '2px 0' : 0,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Contact() {
   const { t } = useTranslation();
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const err = {};
+    if (!form.name.trim()) err.name = 'callsign required';
+    if (!form.email.trim()) err.email = 'channel address required';
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) err.email = 'invalid frequency';
+    if (!form.message.trim()) err.message = 'payload required';
+    setErrors(err);
+    if (Object.keys(err).length === 0) {
+      setSent(true);
+      window.location.href = `mailto:musabugrademir@gmail.com?subject=Contact from ${form.name}&body=${encodeURIComponent(form.message)}%0D%0A%0D%0AReply to: ${form.email}`;
+      setTimeout(() => { setSent(false); setForm({ name: '', email: '', message: '' }); }, 4000);
+    }
+  }
 
   return (
-    <footer id="contact" className="py-24 relative overflow-hidden bg-black/80">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-neon-purple)] to-transparent opacity-30"></div>
-      
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        
-        <div className="grid md:grid-cols-2 gap-16 mb-16">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col relative h-full"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              {t('contact.title')}
-              <span className="text-[var(--color-neon-purple)]">.</span>
-            </h2>
-            
-            <p className="text-xl font-light text-gray-400 mb-10 italic border-l-2 border-[var(--color-neon-purple)] pl-4">
-              "{t('contact.motto')}"
-            </p>
+    <section id="contact" style={{
+      position: 'relative', padding: 'clamp(80px,12vw,160px) clamp(20px,4vw,48px) 100px',
+    }}>
+      <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+        <div className="reveal">
+          <SectionLabel idx="05">{t('contact.label')}</SectionLabel>
+        </div>
+        <div className="reveal reveal-d1" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24, marginBottom: 64 }}>
+          <NeonHeading>
+            {t('contact.title.main').split(' ')[0]}<br />
+            {t('contact.title.main').split(' ').slice(1).join(' ')}
+          </NeonHeading>
+          <div style={{ maxWidth: 360, color: 'var(--ink-dim)', fontSize: 14, lineHeight: 1.6 }}>
+            {t('contact.title.sub')}
+          </div>
+        </div>
 
-            <div className="space-y-6">
-              <a href="mailto:musabugrademir@gmail.com" className="flex items-center gap-4 text-gray-300 hover:text-[var(--color-neon-blue)] transition-colors group">
-                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[var(--color-neon-blue)] transition-colors">
-                  <Mail size={20} />
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">{t('contact.personal')}</div>
-                  <div className="text-lg">musabugrademir@gmail.com</div>
-                </div>
-              </a>
-              
-              <a href="mailto:musabugrademir@ieee.org" className="flex items-center gap-4 text-gray-300 hover:text-[var(--color-neon-purple)] transition-colors group">
-                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[var(--color-neon-purple)] transition-colors">
-                  <Mail size={20} />
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">{t('contact.ieee')}</div>
-                  <div className="text-lg">musabugrademir@ieee.org</div>
-                </div>
-              </a>
+        <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24 }}>
+          {/* Terminal form */}
+          <div className="reveal" style={{
+            position: 'relative', border: '1px solid var(--line)', borderRadius: 12,
+            background: 'rgba(7,11,21,.85)', overflow: 'hidden',
+            boxShadow: '0 30px 60px rgba(0,0,0,.5)',
+          }}>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '12px 16px', borderBottom: '1px solid var(--line)',
+              background: 'rgba(0,0,0,.3)',
+              fontFamily: 'var(--ff-mono)', fontSize: 11, color: 'var(--ink-dim)',
+              letterSpacing: '0.12em',
+            }}>
+              <span style={{
+                width: 8, height: 8, borderRadius: '50%', background: 'var(--green)',
+                boxShadow: '0 0 8px var(--green)', animation: 'pulse 2s ease-in-out infinite',
+              }} />
+              CHANNEL OPEN · /dev/comms
+            </div>
+            <form onSubmit={onSubmit} style={{ padding: 'clamp(20px,3vw,32px)' }}>
+              <Field label={t('contact.form.callsign')} value={form.name} error={errors.name} onChange={(v) => setForm({ ...form, name: v })} placeholder={t('contact.form.callsign_ph')} />
+              <Field label={t('contact.form.freq')} value={form.email} error={errors.email} onChange={(v) => setForm({ ...form, email: v })} placeholder={t('contact.form.freq_ph')} type="email" />
+              <Field label={t('contact.form.payload')} value={form.message} error={errors.message} onChange={(v) => setForm({ ...form, message: v })} placeholder={t('contact.form.payload_ph')} textarea />
 
-              <div className="flex gap-4 pt-6">
-                <a href="https://www.linkedin.com/in/musabugrademir/" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#0077b5]/10 text-[#0077b5] border border-[#0077b5]/30 flex items-center justify-center hover:bg-[#0077b5] hover:text-white hover:shadow-[0_0_20px_#0077b5] transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                </a>
-                <a href="https://github.com/NightKnight-nx2" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-white/5 text-white border border-white/20 flex items-center justify-center hover:bg-white hover:text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
-                </a>
-                <a href="https://linktr.ee/MusaBugraDemir" target="_blank" rel="noopener noreferrer" className="w-14 h-14 rounded-full bg-[#43E660]/10 text-[#43E660] border border-[#43E660]/30 flex items-center justify-center hover:bg-[#43E660] hover:text-black hover:shadow-[0_0_20px_#43E660] transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13.736 5.853l4.005-4.117 2.325 2.38-4.2 4.005h5.908v3.305h-5.937l4.229 4.108-2.325 2.334-5.74-5.769v11.9h-3.304v-11.9l-5.74 5.769-2.325-2.334 4.229-4.108H4.925V8.121h5.908l-4.2-4.005 2.325-2.38 4.005 4.117V0h3.304v5.853z" /></svg>
-                </a>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginTop: 20 }}>
+                <div style={{
+                  fontFamily: 'var(--ff-mono)', fontSize: 11, color: 'var(--ink-faint)',
+                  letterSpacing: '0.1em',
+                }}>
+                  {t('contact.form.enc')}<span style={{ color: 'var(--green)' }}>{t('contact.form.enc_val')}</span>
+                </div>
+                <button type="submit" className="btn-primary" disabled={sent} style={sent ? { background: 'var(--green)', color: '#000' } : null}>
+                  {sent ? (
+                    <>
+                      <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
+                      <span>{t('contact.form.sent')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{t('contact.form.transmit')}</span>
+                      <svg width="14" height="14" viewBox="0 0 14 14"><path d="M1 7l12-5-5 12-2-5-5-2z" fill="currentColor" /></svg>
+                    </>
+                  )}
+                </button>
               </div>
+            </form>
+          </div>
+
+          {/* Comms panel */}
+          <div className="reveal reveal-d2" style={{
+            position: 'relative', borderRadius: 12, padding: 'clamp(24px,3.5vw,40px)',
+            border: '1px solid var(--line)', background: 'rgba(7,11,21,.6)',
+            overflow: 'hidden',
+          }}>
+            <CornerTicks />
+            <div style={{
+              fontFamily: 'var(--ff-mono)', fontSize: 11, color: 'var(--ink-dim)',
+              letterSpacing: '0.18em', marginBottom: 22,
+            }}>// DIRECT_LINKS.cfg</div>
+
+            <div style={{ display: 'grid', gap: 8, marginBottom: 28 }}>
+              {[
+                { label: 'github', value: '@nightknight-nx2', url: 'https://github.com/nightknight-nx2', color: 'cyan' },
+                { label: 'linkedin', value: 'musa-bugra-demir', url: 'https://www.linkedin.com/in/musabugrademir/', color: 'magenta' },
+                { label: 'linktree', value: '@musabugrademir', url: 'https://linktr.ee/musabugrademir', color: 'violet' },
+                { label: 'email', value: 'musabugrademir@gmail.com', url: 'mailto:musabugrademir@gmail.com', color: 'green' },
+              ].map((l) => (
+                <a key={l.label} href={l.url} target="_blank" rel="noreferrer" className="contact-link" style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '14px 16px', borderRadius: 8,
+                  border: '1px solid var(--line)', background: 'rgba(0,0,0,.2)',
+                  transition: 'all .25s',
+                }}>
+                  <span style={{
+                    fontFamily: 'var(--ff-mono)', fontSize: 11, color: 'var(--ink-dim)',
+                    letterSpacing: '0.18em', textTransform: 'uppercase',
+                  }}>{l.label}</span>
+                  <span style={{
+                    fontFamily: 'var(--ff-mono)', fontSize: 13,
+                    color: l.color === 'ink' ? 'var(--ink)' : `var(--${l.color})`,
+                  }}>{l.value} →</span>
+                </a>
+              ))}
             </div>
 
-            {/* Animated Stars */}
-            <div className="hidden md:block absolute bottom-16 right-16 pointer-events-none z-0">
-              <Sparkles size={48} className="absolute -top-12 right-0 text-[var(--color-neon-blue)] animate-pulse" style={{ animationDuration: '3s' }} />
-              <Star size={24} className="absolute top-8 -left-20 text-[var(--color-neon-purple)] animate-pulse" style={{ animationDelay: '1s', animationDuration: '4s' }} />
+            {/* orbital comm visual */}
+            <div style={{ position: 'relative', height: 180, margin: '0 -16px', overflow: 'hidden' }}>
+              <svg viewBox="0 0 400 180" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <defs>
+                  <radialGradient id="cg" cx="50%" cy="100%" r="80%">
+                    <stop offset="0%" stopColor="rgba(0,240,255,0.18)" />
+                    <stop offset="100%" stopColor="rgba(0,240,255,0)" />
+                  </radialGradient>
+                </defs>
+                {[60, 100, 140].map((r, i) => (
+                  <ellipse key={r} cx="200" cy="200" rx={r * 1.4} ry={r * 0.6} fill="none" stroke="rgba(0,240,255,.2)" strokeDasharray={i === 0 ? '4 4' : 'none'} />
+                ))}
+                <circle cx="200" cy="200" r="6" fill="var(--cyan)" />
+                <circle cx="200" cy="200" r="14" fill="none" stroke="var(--cyan)" opacity="0.4">
+                  <animate attributeName="r" from="14" to="80" dur="2.4s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" from="0.6" to="0" dur="2.4s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="120" cy="60" r="3" fill="var(--magenta)" />
+                <circle cx="320" cy="40" r="2" fill="var(--violet)" />
+                <circle cx="60" cy="100" r="2" fill="var(--cyan)" opacity="0.7" />
+                <circle cx="340" cy="110" r="2" fill="var(--ink)" opacity="0.5" />
+                <rect x="0" y="0" width="400" height="180" fill="url(#cg)" />
+              </svg>
             </div>
-          </motion.div>
-
-          {/* GitHub Stats */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col gap-4"
-          >
-            <div className="glass-panel p-1 rounded-xl overflow-hidden hover:shadow-[0_0_30px_rgba(176,38,255,0.2)] transition-shadow duration-500 border border-[var(--color-neon-purple)]/20">
-              <img 
-                src="https://github-readme-stats-xi-seven-54.vercel.app/api?username=NightKnight-nx2&show_icons=true&theme=radical&include_all_commits=true&count_private=true&bg_color=050505&hide_border=true&title_color=b026ff&icon_color=00f3ff&text_color=ffffff" 
-                alt="GitHub Stats" 
-                className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity"
-              />
-            </div>
-            
-            <div className="glass-panel p-1 rounded-xl overflow-hidden hover:shadow-[0_0_30px_rgba(0,243,255,0.2)] transition-shadow duration-500 border border-[var(--color-neon-blue)]/20">
-              <img 
-                src="https://github-readme-stats-xi-seven-54.vercel.app/api/top-langs/?username=NightKnight-nx2&layout=compact&theme=radical&bg_color=050505&hide_border=true&title_color=00f3ff&text_color=ffffff" 
-                alt="Top Languages" 
-                className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity"
-              />
-            </div>
-          </motion.div>
+          </div>
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-500 relative z-10">
-          <div className="flex-1 text-center md:text-left">
-            <p>© {new Date().getFullYear()} Musa Buğra Demir. All rights reserved.</p>
-          </div>
-
-          <div className="flex-1 hidden md:block">
-            {/* Empty space for the center to keep flex layout balanced */}
-          </div>
-
-          <div className="flex-1 flex items-center justify-center md:justify-end gap-2">
-            <span>Built with React & Tailwind</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-neon-green)] animate-pulse"></span>
+        {/* Footer */}
+        <div className="reveal reveal-d3" style={{
+          marginTop: 80, paddingTop: 32, borderTop: '1px solid var(--line)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          flexWrap: 'wrap', gap: 16,
+          fontFamily: 'var(--ff-mono)', fontSize: 11, color: 'var(--ink-faint)',
+          letterSpacing: '0.15em',
+        }}>
+          <div>© {new Date().getFullYear()} · MUSA BUĞRA DEMİR · ALL TRANSMISSIONS LOGGED</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: '50%', background: 'var(--green)',
+              boxShadow: '0 0 8px var(--green)',
+            }} />
+            END OF SIGNAL
           </div>
         </div>
-
       </div>
-    </footer>
+    </section>
   );
-};
+}
 
 export default Contact;
