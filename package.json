@@ -13,14 +13,10 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.38.0",
     "i18next": "^26.0.8",
-    "lucide-react": "^1.14.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-i18next": "^17.0.6",
-    "tailwind-merge": "^3.5.0"
+    "react-i18next": "^17.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -34,7 +30,6 @@
     "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
     "postcss": "^8.5.13",
-    "tailwindcss": "^3.4.19",
     "vite": "^5.0.0"
   }
 }

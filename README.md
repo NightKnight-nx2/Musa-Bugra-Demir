@@ -4,20 +4,17 @@ A modern, dynamic, and highly interactive personal portfolio website showcasing 
 
 ## ✨ Key Features
 
-- **Modern Bento Grid Layout:** Symmetrical and asymmetrical grid systems used for presenting project experiences clearly and beautifully.
-- **Dynamic Neon Aesthetics:** Interactive hover states with "glow" effects mapped to specific project colors (e.g., IEEE Blue, OpenCV Green).
-- **Full Bilingual Support (i18n):** Seamlessly switch between Turkish and English with a single click, updating all content instantly.
-- **Scroll Spy Navigation:** The top navigation bar automatically tracks your scroll position, updating the URL hash and highlighting the active section with its respective neon color.
-- **Smooth Animations:** Powered by `framer-motion` for fluid page loads, scroll reveals, and micro-interactions.
-- **Responsive Design:** Fully optimized for mobile, tablet, and desktop screens using Tailwind CSS.
+- **Proof first:** featured projects with real figures and measured results, a filterable archive of every repo, and case-study pages (`#/p/<slug>`).
+- **Bilingual (TR/EN):** all content lives in `src/data/` as `{ tr, en }` pairs; the language choice is remembered.
+- **Content as data:** edit `src/data/content.js` (home page) and `src/data/caseStudies.js` (project pages) · no component changes needed. Values wrapped in `TODO(...)` render as visible amber placeholders until filled in.
+- **Accessible & light:** semantic HTML, keyboard focus styles, skip link, `prefers-reduced-motion`, no animation library.
+- **SEO:** meta description, Open Graph image (`public/og-image.png`), JSON-LD Person schema.
 
 ## 🛠️ Tech Stack
 
 - **Framework:** React 19 + Vite
-- **Styling:** Tailwind CSS + Vanilla CSS (for custom variables & background effects)
-- **Animations:** Framer Motion
+- **Styling:** plain CSS with design tokens (`src/index.css`) · Archivo, IBM Plex Sans, IBM Plex Mono
 - **Localization:** react-i18next
-- **Icons:** Lucide React
 - **Deployment:** GitHub Pages (`gh-pages`)
 
 ## 🚀 Quick Start (Local Development)
