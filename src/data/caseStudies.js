@@ -152,6 +152,59 @@ export const CASE_STUDIES = {
     ],
   },
 
+  'perception-control-loop': {
+    kicker: t('VAKA ÇALIŞMASI · ALGI + KONTROL', 'CASE STUDY · PERCEPTION + CONTROL'),
+    title: 'Perception-Control Loop',
+    subtitle: t('kamera → YOLOX → koni haritası → kontrolcü', 'camera → YOLOX → cone map → controller'),
+    summary: t(
+      'Unity’deki bir yarış aracına sabit bir ön kamera ekledim. Kameranın gördüğü koniler sahneden otomatik etiketleniyor, bu sentetik veriyle YOLOX-nano eğitiliyor ve canlı çalıştırılıyor. Algılanan konilerden bir raceline çıkarılıyor ve aynı araç bir kez gerçek raceline’la, bir kez algıladığıyla sürülüp karşılaştırılıyor.',
+      'I mounted a fixed front camera on a race car in Unity. Cones it sees are auto-labelled from the scene, YOLOX-nano is trained on that synthetic data and run live. A raceline is built from the detected cones, and the same car is driven once on the true raceline and once on what it perceives, then compared.'
+    ),
+    meta: [
+      { k: t('ROL', 'ROLE'), v: t('Tek geliştirici', 'Sole developer') },
+      { k: t('YIĞIN', 'STACK'), v: 'Python · PyTorch · YOLOX · Unity (C#)' },
+      { k: t('VERİ', 'DATA'), v: t('Tamamen sentetik, dış veri seti yok', 'Fully synthetic, no external dataset') },
+      { k: t('KOD', 'CODE'), v: t('~2 400 satır Python · ~1 450 satır C#', '~2,400 lines Python · ~1,450 lines C#') },
+    ],
+    links: [{ label: 'perception-control-loop ↗', href: GH + 'perception-control-loop' }],
+    hero: { src: A + 'perception-loop-camera.webp', alt: t('Unity ön kamerasında dört anlık görüntü, YOLOX tespitleri ve gecikme', 'Four Unity front-camera frames with YOLOX detections and latency'), caption: t('Canlı ön kamera: YOLOX tespitleri, kare başına tespit sayısı ve algı gecikmesi.', 'Live front camera: YOLOX detections, detections per frame and perception latency.'), fit: 'contain' },
+    stats: [
+      { v: '0.917', l: 'AP50 · Unity fine-tune' },
+      { v: '+0.17 s', l: t('YOLOX’un tura eklediği kayıp', 'lap time added by YOLOX') },
+      { v: '59 ms', l: t('ortalama algı gecikmesi', 'mean perception latency') },
+      { v: '0', l: t('koni teması', 'cone contacts') },
+    ],
+    flowTitle: t('Veri akışı', 'Data flow'),
+    flow: [
+      ['Unity PerceptionCamera', '*dataset.py · 10 Hz otomatik etiket|dataset.py · 10 Hz auto-label', 'yolox_train.py'],
+      ['PerceptionBridge (TCP)', '*detector.py (YOLOX)', 'cone_mapping.py', '!closed_loop.py (Stanley + RK4)'],
+    ],
+    flowNote: t('İki render arka ucu aynı arayüzü uygular: gerçek Unity sahnesi ve aynı geometri ile kamera modelini kullanan, Unity’siz test için OpenCV referansı.', 'Two render back-ends share one interface: the real Unity scene and an OpenCV reference with the same geometry and camera model, for testing without Unity.'),
+    decisions: [
+      { title: t('Etiketleri sahne veriyor', 'The scene provides the labels'), body: t('Her koninin 40 noktası ekrana projekte edilip sıkı kutu çıkarılıyor; mesafe, boyut ve görünürlük filtresinden geçen kutular yazılıyor. Elle tek bir etiket bile yok.', 'Forty points per cone are projected to the screen for a tight box, kept only if they pass distance, size and visibility filters. Not a single label is drawn by hand.') },
+      { title: t('Sızıntısız doğrulama', 'Leak-free validation'), body: t('Eğitim jitter’lı koni yerleşimleri ve domain randomization ile; doğrulama, kapalı döngüde yarışılan resmî yerleşimle. Model yarışacağı pisti eğitimde hiç görmüyor.', 'Training uses jittered cone layouts with domain randomization; validation uses the official layout raced in closed loop. The model never sees its race track during training.') },
+      { title: t('Ufuk bandına odaklan', 'Focus on the horizon band'), body: t('Ağ tam kare yerine ufuk çevresindeki 352×960 bandı işliyor; gökyüzü ve araç burnu atılıyor, uzak koniler küçültülmüyor.', 'The network processes a 352×960 band around the horizon instead of the full frame, dropping sky and bonnet so distant cones aren’t downscaled.') },
+      { title: t('Hatayı Python’da yeniden üret', 'Reproduce the failure in Python'), body: t('İlk Unity koşusunda araç S-virajda pistten çıktı. Hata yapay algı gürültüsüyle yeniden üretildi; dört sağlamlık önleminden sonra pistten çıkma 12 denemede 8’den 24 denemede 0’a indi.', 'In the first Unity run the car left the track at the S-bend. The failure was reproduced with synthetic perception noise; after four robustness fixes, off-track runs dropped from 8 of 12 to 0 of 24.') },
+    ],
+    resultsTable: {
+      title: t('Unity’de kapalı döngü sonuçları', 'Closed-loop results in Unity'),
+      head: [t('METRİK', 'METRIC'), t('GERÇEK RACELINE', 'TRUE RACELINE'), t('KUSURSUZ DEDEKTÖR', 'PERFECT DETECTOR'), 'YOLOX'],
+      rows: [
+        [t('Tur zamanı', 'Lap time'), '27.32 s', '28.68 s', '28.86 s'],
+        [t('Yanal sapma RMS', 'Lateral deviation RMS'), '0.68 m', '0.44 m', '0.39 m'],
+        [t('Toplam algı gecikmesi ort.', 'Mean total perception latency'), '0 ms', '21 ms', '59 ms'],
+        [t('Kare başına precision / recall', 'Per-frame precision / recall'), '-', '1.000 / 1.000', '0.943 / 0.932'],
+        [t('Algılanan yol - gerçek merkez hattı', 'Perceived path vs true centreline'), '-', '0.05 m', '0.09 m'],
+      ],
+      note: t('Tur kaybının büyük kısmı dedektörden değil, kameranın ~45 m görüş ufkundan ve hız planındaki güvenlik payından geliyor: kusursuz dedektör de 1,36 s kaybediyor. Algı modlarında yanal sapmanın düşük olması aracın daha yavaş gitmesinden.', 'Most of the lap time loss comes from the camera’s ~45 m horizon and the speed plan’s safety margin, not the detector: a perfect detector also loses 1.36 s. Lower lateral deviation in perception modes comes from the slower speed.'),
+    },
+    limits: [
+      t('Domain farkı: headless veriyle eğitilen model Unity’de recall’u 0,94’ten 0,60’a düşürüp aracı pistten çıkardı; Unity sonuçları Unity görüntüleriyle fine-tune edilmiş modelle alındı.', 'Domain gap: the model trained on headless renders dropped recall from 0.94 to 0.60 in Unity and left the track; Unity results use a model fine-tuned on Unity images.'),
+      t('Sağlamlık önlemleri gerçek kamerayla değil, yapay gürültüyle doğrulandı; simülasyon gerçek bir pistin karmaşıklığını taşımıyor.', 'Robustness fixes were validated with synthetic noise, not a real camera; the sim lacks a real track’s complexity.'),
+      t('Kusursuz odometri ve düz zemin varsayılıyor; eğimli pistte geri-projeksiyon hatası büyür.', 'Perfect odometry and flat ground are assumed; back-projection error grows on sloped tracks.'),
+    ],
+  },
+
   'dual-protocol': {
     kicker: t('VAKA ÇALIŞMASI · OYUN TASARIMI · AEGEAN CRAFTERS', 'CASE STUDY · GAME DESIGN · AEGEAN CRAFTERS'),
     title: 'Dual Protocol',
@@ -197,4 +250,4 @@ export const CASE_STUDIES = {
   },
 };
 
-export const CASE_ORDER = ['mavi-inci', 'aquavena', 'vehicle-sim-7dof', 'dual-protocol'];
+export const CASE_ORDER = ['mavi-inci', 'aquavena', 'vehicle-sim-7dof', 'perception-control-loop', 'dual-protocol'];

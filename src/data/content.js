@@ -12,7 +12,11 @@ export const PROFILE = {
   email: 'musabugrademir@gmail.com',
   github: 'https://github.com/NightKnight-nx2',
   linkedin: 'https://www.linkedin.com/in/musabugrademir/',
-  cv: './assets/cvmusabugrademir.pdf',
+  // CV per language; the site serves the one matching the current UI language.
+  cv: {
+    tr: { href: './assets/cvmusabugrademir-tr.pdf', file: 'Musa_Bugra_Demir_Ozgecmis_TR.pdf' },
+    en: { href: './assets/cvmusabugrademir.pdf', file: 'Musa_Bugra_Demir_CV_EN.pdf' },
+  },
   portrait: './assets/pp.webp',
   updated: t('Kasım 2026', 'November 2026'),
 };
@@ -87,20 +91,21 @@ export const FEATURED = [
     code: GH + 'vehicle-sim-7dof',
   },
   {
+    slug: 'perception-control-loop',
+    kicker: t('ALGI + KONTROL · UNITY + YOLOX', 'PERCEPTION + CONTROL · UNITY + YOLOX'),
+    title: 'Perception-Control Loop',
+    body: t('Unity’deki araca sanal ön kamera: koniler sahneden otomatik etiketleniyor, bu sentetik veriyle YOLOX-nano eğitilip canlı çalıştırılıyor. Algılanan koniler zemine geri-projekte edilip raceline’a çevriliyor; Stanley kontrolcüsü gerçek raceline yerine bunu sürüyor.', 'A virtual front camera on a Unity car: cones are auto-labelled from the scene, YOLOX-nano is trained on that synthetic data and run live. Detected cones are back-projected to the ground and turned into a raceline that the Stanley controller drives instead of the ground truth.'),
+    metric: t('YOLOX’un tura eklediği kayıp: <b>~0,17 s</b> · algı gecikmesi <b>59 ms</b>', 'Lap time cost of YOLOX: <b>~0.17 s</b> · perception latency <b>59 ms</b>'),
+    image: { src: A + 'perception-loop-camera.webp', alt: t('Unity ön kamerasında YOLOX koni tespitleri', 'YOLOX cone detections on the Unity front camera'), top: true },
+    code: GH + 'perception-control-loop',
+  },
+  {
     kicker: t('UZAKTAN ALGILAMA · IoT · PROJE YÜRÜTÜCÜSÜ', 'REMOTE SENSING · IoT · PROJECT LEAD'),
     title: t('TerraSync', 'TerraSync'),
     body: t('Sentinel/Landsat görüntülerini düşük maliyetli ESP32 yer sensörleriyle birleştirip kentsel ısı adası, yeşil alan kaybı ve su stresini mahalle ölçeğinde haritalayan açık kaynak karar destek sistemi.', 'An open-source decision-support system that fuses Sentinel/Landsat imagery with low-cost ESP32 ground sensors to map urban heat islands, green-space loss and water stress at neighbourhood scale.'),
     metric: t('Pilot bölge: <b>Bornova / İzmir</b>', 'Pilot area: <b>Bornova / İzmir</b>'),
     logo: A + 'terrasync-logo.webp',
     flow: [['Sentinel-2 · Landsat', 'Earth Engine'], ['ESP32 sensörler|ESP32 sensors', '*füzyon|fusion'], ['!mahalle risk haritası|neighbourhood risk map']],
-  },
-  {
-    kicker: t('YAPAY ZEKA · PEKİŞTİRMELİ ÖĞRENME', 'AI · REINFORCEMENT LEARNING'),
-    title: t('LunarLander · REINFORCE', 'LunarLander · REINFORCE'),
-    body: t('212 parametrelik bir politika ağı “havada asılı kalma” yerel optimumuna sıkışıyor; entropi annealing ile tuzaktan çıkıp inmeyi öğreniyor. 3 tohum üzerinde kontrol grubuyla karşılaştırıldı.', 'A 212-parameter policy gets stuck in a “hovering” local optimum; entropy annealing lets it escape and learn to land. Compared against a control group over 3 seeds.'),
-    metric: t('Son 500 bölüm iniş oranı: <b>%3,0 → %91,1</b>', 'Landing rate, last 500 episodes: <b>3.0% → 91.1%</b>'),
-    image: { src: A + 'lunarlander.webp', alt: t('Annealing ve kontrol grubunun iniş oranı grafiği', 'Landing-rate chart, annealing vs control'), light: true },
-    code: GH + 'lunarlander-reinforce',
   },
   {
     kicker: t('WEB · TASARIM + FULLSTACK', 'WEB · DESIGN + FULLSTACK'),
@@ -163,7 +168,9 @@ export const ARCHIVE = [
   { cat: 'ctl', lang: 'Python', title: t('F1 Porpoising Laboratuvarı', 'F1 Porpoising Lab'), desc: t('Ground-effect porpoising olayını parametrelerle keşfettiren etkileşimli Streamlit uygulaması.', 'An interactive Streamlit app for exploring ground-effect porpoising.'), result: t('Etkileşimli demo', 'Interactive demo'), href: GH + 'f1-porpoising-teaching-lab' },
   { cat: 'ctl', lang: 'HTML', title: t('Yük Transferi Simülatörü', 'Load-Transfer Simulator'), desc: t('Roll-stiffness dağılımının understeer / oversteer davranışına etkisi, tarayıcıda.', 'How roll-stiffness distribution drives understeer vs oversteer, in the browser.'), result: t('Tarayıcıda çalışır', 'Runs in browser'), href: GH + 'load-transfer-sim' },
   { cat: 'ctl', lang: 'Python', title: t('Yay Tahrikli Çift Sarkaç', 'Spring-Driven Double Pendulum'), desc: t('Otoparametrik rezonans ve kaotik davranışın sayısal analizi.', 'Numerical study of autoparametric resonance and chaos.'), result: t('Kaos · rezonans', 'Chaos · resonance'), href: GH + 'spring-driven-double-pendulum' },
-  { cat: 'ai', lang: 'Python', title: t('FSOCO Koni Tespiti', 'FSOCO Cone Detection'), desc: t('Formula Student Driverless için YOLO11n fine-tune → ByteTrack takip → pist orta çizgisi tahmini.', 'For Formula Student Driverless: YOLO11n fine-tuning → ByteTrack tracking → track centreline estimation.'), result: t('Algılama → takip → şerit', 'Detect → track → lane'), href: GH + 'fsoco-cone-detection' },
+  { cat: 'ai', lang: 'Python', title: t('FSOCO Koni Tespiti', 'FSOCO Cone Detection'), desc: t('Formula Student Driverless için gerçek FSOCO fotoğraflarıyla YOLO11n fine-tune, ByteTrack takip ve orta çizgi tahmini; takım bazlı, sızıntısız test split’i.', 'YOLO11n fine-tuned on real FSOCO photos for Formula Student Driverless, plus ByteTrack tracking and centreline estimation; leak-free, team-based test split.'), result: t('mAP50 0,787 · 4,8 ms/görüntü', 'mAP50 0.787 · 4.8 ms/image'), href: GH + 'fsoco-cone-detection' },
+  { cat: 'ai', lang: 'Python · Unity', title: 'Perception-Control Loop', desc: t('Unity’de otomatik etiketlenen sentetik veriyle YOLOX-nano; algılanan konilerden raceline ve kapalı döngü Stanley kontrolü.', 'YOLOX-nano trained on auto-labelled Unity data; a raceline built from detected cones drives a closed-loop Stanley controller.'), result: t('mAP 0,734 · AP50 0,917', 'mAP 0.734 · AP50 0.917'), href: '#/p/perception-control-loop' },
+  { cat: 'ai', lang: 'Python', title: 'LunarLander REINFORCE', desc: t('212 parametrelik politika ağı, entropi annealing ile “havada asılı kalma” yerel optimumundan kurtuluyor; 3 tohumda kontrol grubuyla karşılaştırma.', 'A 212-parameter policy escapes a “hovering” local optimum through entropy annealing; compared with a control group over 3 seeds.'), result: t('İniş oranı %3,0 → %91,1', 'Landing rate 3.0% → 91.1%'), href: GH + 'lunarlander-reinforce' },
   { cat: 'ai', lang: 'Python · ESP32', title: 'TerraSync', desc: t('Sentinel-2/Landsat görüntüleri + IoT yer sensörleriyle kentsel ısı adası, yeşil alan ve su stresi haritalama.', 'Mapping urban heat islands, green space and water stress from Sentinel-2/Landsat imagery plus IoT ground sensors.'), result: t('Bornova pilotu', 'Bornova pilot'), href: null },
   { cat: 'ai', lang: 'Python', title: t('Göğüs Röntgeni · Pnömoni', 'Chest X-Ray · Pneumonia'), desc: t('ResNet50 transfer öğrenme, kademeli unfreeze, recall odaklı eşik ve Grad-CAM açıklanabilirlik; masaüstü arayüz.', 'ResNet50 transfer learning, gradual unfreezing, a recall-focused threshold and Grad-CAM explanations; desktop GUI.'), result: 'Grad-CAM', href: GH + 'chest-xray-pneumonia-detection' },
   { cat: 'ai', lang: 'Python', title: t('Yorgunluk & Duruş İzleme', 'Fatigue & Posture Monitor'), desc: t('MediaPipe Face Mesh ile EAR tabanlı uyuklama ve boyun açısı tespiti; çok iş parçacıklı kamera akışı.', 'EAR-based drowsiness and neck-angle detection with MediaPipe; multi-threaded camera capture.'), result: t('CPU’da gerçek zamanlı', 'Real-time on CPU'), href: GH + 'Realtime-Fatigue-and-Posture-Monitoring-System' },
